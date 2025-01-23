@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2D Random Walk with Drift</title>
+    <style>
+        canvas { border: 2px solid #000; background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Walking trough life</h1>
+        <ol>
+            <li>If life was in a vacuum, you would essentially do a <b>random walk.</b></li>
+            <li>But life is not a vacuum. Society will tell you where to go, introducing <b>drift</b>.</li>
+            <li>If you have a <b>vision</b>, you can introduce a drift of your own.</li>
+            <li>If you do not have a vision, you can stay upwind <a href="#[1]">[1]</a>. 
+                This might correspond to increasing the random walk's stepsize, allowing you to reach your goal (which hopfully will be defined at a later point) faster.
+                Implementation into the visualisation is trivial and thus left to the reader as an exercise.
+            </li>
+        </ol>
+        
+    <canvas id="randomWalkCanvas" width="600" height="400"></canvas>
+    <br>
+    <button onclick="startAnimation()">Start Walk</button>
+    <button onclick="resetAnimation()">Reset</button>
+    <button id="driftButton" onclick="toggleDrift()">Drift: OFF</button>
+    <button id="visionButton" onclick="toggleVision()">Vision: OFF</button>
+
+    <script>
+        const canvas = document.getElementById('randomWalkCanvas');
+        const ctx = canvas.getContext('2d');
+        let x = canvas.width / 2;
+        let y = canvas.height / 2;
+        let path = [];
+        let animationId;
+        let driftAngle = 0;
+        let stepsize = 20;
+        let driftEnabled = false;
+        let driftStrength = 0.1;
+        let visionEnabled = false;
+        let visionStrength = 0.1;
+
+        function isAtWall(newX, newY) {
+            return newX <= 0 || newX >= canvas.width || 
+                   newY <= 0 || newY >= canvas.height;
+        }
+
+        function randomWalkStep() {
+            let dx = Math.random() - 0.5;
+            let dy = Math.random() - 0.5;
+            
+            // Add drift if enabled
+            if (driftEnabled) {
+                dx += driftStrength*Math.cos(driftAngle);
+                dy += driftStrength*Math.sin(driftAngle);
+            }
+            
+            // Add vision if enabled (only goes up!)
+            if (visionEnabled) {
+                dy += visionStrength;
+            }
+
+            const newX = x + dx * stepsize;
+            const newY = y + dy * stepsize;
+            
+            if (isAtWall(newX, newY)) {
+                return null;
+            }
+            
+            x = newX;
+            y = newY;
+            
+            return { x, y };
+        }
+
+        function drawPath() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.beginPath();
+            ctx.moveTo(path[0].x, path[0].y);
+            for (let i = 1; i < path.length; i++) {
+                ctx.lineTo(path[i].x, path[i].y);
+            }
+            ctx.strokeStyle = 'blue';
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+        }
+
+        function animate() {
+            const newPoint = randomWalkStep();
+            if (newPoint) {
+                path.push(newPoint);
+                drawPath();
+                animationId = requestAnimationFrame(animate);
+            } else {
+                alert('Reached a wall!');
+            }
+        }
+
+        function startAnimation() {
+            if (!animationId) {
+                animate();
+            }
+        }
+
+        function resetAnimation() {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+            x = canvas.width / 2;
+            y = canvas.height / 2;
+            path = [{ x, y }];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPath();
+        }
+
+        function toggleDrift() {
+            driftEnabled = !driftEnabled;
+            const driftButton = document.getElementById('driftButton');
+            driftButton.textContent = driftEnabled ? 'Drift: ON' : 'Drift: OFF';
+
+            // Randomize drift angle when enabled
+            if (driftEnabled) {
+                driftAngle = Math.random() * 2 * Math.PI;
+            }
+        }
+
+        function toggleVision() {
+            visionEnabled = !visionEnabled;
+            const visionButton = document.getElementById('visionButton');
+            visionButton.textContent = visionEnabled ? 'Vision: ON' : 'Vision: OFF';
+        }
+
+        path = [{ x, y }];
+        drawPath();
+    </script>
+    
+<section>
+    <h2 id="[1]">[1] staying upwind</h2>
+    <blockquote>
+    I think the solution is to work in the other direction. Instead of working back from a goal, work forward from promising situations. This is what most successful people actually do anyway.
+    <br>
+    In the graduation-speech approach, you decide where you want to be in twenty years, and then ask: what should I do now to get there? I propose instead that you don't commit to anything in the future, but just look at the options available now, and choose those that will give you the most promising range of options afterward.
+    <br>
+    It's not so important what you work on, so long as you're not wasting your time. Work on things that interest you and increase your options, and worry later about which you'll take.
+    <br>
+    Suppose you're a college freshman deciding whether to major in math or economics. Well, math will give you more options: you can go into almost any field from math. If you major in math it will be easy to get into grad school in economics, but if you major in economics it will be hard to get into grad school in math.
+    <br>
+    Flying a glider is a good metaphor here. Because a glider doesn't have an engine, you can't fly into the wind without losing a lot of altitude. If you let yourself get far downwind of good places to land, your options narrow uncomfortably. As a rule you want to stay upwind. So I propose that as a replacement for "don't give up on your dreams." Stay upwind.
+    <br>
+    How do you do that, though? Even if math is upwind of economics, how are you supposed to know that as a high school student?
+    <br>
+    Well, you don't, and that's what you need to find out. Look for smart people and hard problems. Smart people tend to clump together, and if you can find such a clump, it's probably worthwhile to join it. But it's not straightforward to find these, because there is a lot of faking going on.
+    [...]
+    <br>
+    The best protection is always to be working on hard problems. Writing novels is hard. Reading novels isn't. Hard means worry: if you're not worrying that something you're making will come out badly, or that you won't be able to understand something you're studying, then it isn't hard enough. There has to be suspense.
+    <br>
+    Well, this seems a grim view of the world, you may think. What I'm telling you is that you should worry? Yes, but it's not as bad as it sounds. It's exhilarating to overcome worries. You don't see faces much happier than people winning gold medals. And you know why they're so happy? Relief.
+    <br>
+    I'm not saying this is the only way to be happy. Just that some kinds of worry are not as bad as they sound.
+</section>
+</body>
+</html>
