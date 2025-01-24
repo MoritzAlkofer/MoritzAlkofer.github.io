@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2D Random Walk with Drift</title>
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+    <div class="container">
+    <h1>Walking trough life</h1>
+        <ol>
+            <li>If life was in a vacuum, you would essentially do a <b>random walk.</b></li>
+            <li>But life is not a vacuum. Society will tell you where to go, introducing <b>drift</b>.</li>
+            <li>If you have a <b>vision</b>, you can introduce a drift of your own.</li>
+            <li>If you do not have a vision, you can stay upwind <a href="#1">[1]</a>. 
+                This might correspond to learning how to increase ones stepsize. Once you got a vision, you can go there really fast. 
+                Also, it keeps open the doors for getting there. <br>
+                Implementation into the visualisation is trivial and thus left to the reader as an exercise.
+            </li>
+        </ol>
+        <canvas id="Canvas" width="600" height="400"></canvas>
+        <br>
+        <button onclick="startAnimation()">Start Walk</button>
+        <button onclick="resetAnimation()">Reset</button>
+        <button id="driftButton" onclick="toggleDrift()">Drift: OFF</button>
+        <button id="visionButton" onclick="toggleVision()">Vision: OFF</button>
+    
+    <script src="combined.js"></script>
+
+        <section><h2 id="1">[1] staying upwind</h2>
+            <blockquote>
+                I think the solution is to work in the other direction. Instead of working back from a goal, work forward from promising situations. This is what most successful people actually do anyway.
+                <br>
+                In the graduation-speech approach, you decide where you want to be in twenty years, and then ask: what should I do now to get there? I propose instead that you don't commit to anything in the future, but just look at the options available now, and choose those that will give you the most promising range of options afterward.
+                <br>
+                It's not so important what you work on, so long as you're not wasting your time. Work on things that interest you and increase your options, and worry later about which you'll take.
+                <br>
+                Suppose you're a college freshman deciding whether to major in math or economics. Well, math will give you more options: you can go into almost any field from math. If you major in math it will be easy to get into grad school in economics, but if you major in economics it will be hard to get into grad school in math.
+                <br>
+                Flying a glider is a good metaphor here. Because a glider doesn't have an engine, you can't fly into the wind without losing a lot of altitude. If you let yourself get far downwind of good places to land, your options narrow uncomfortably. As a rule you want to stay upwind. So I propose that as a replacement for "don't give up on your dreams." Stay upwind.
+                <br>
+                How do you do that, though? Even if math is upwind of economics, how are you supposed to know that as a high school student?
+                <br>
+                Well, you don't, and that's what you need to find out. Look for smart people and hard problems. Smart people tend to clump together, and if you can find such a clump, it's probably worthwhile to join it. But it's not straightforward to find these, because there is a lot of faking going on.
+                [...]
+                <br>
+                The best protection is always to be working on hard problems. Writing novels is hard. Reading novels isn't. Hard means worry: if you're not worrying that something you're making will come out badly, or that you won't be able to understand something you're studying, then it isn't hard enough. There has to be suspense.
+                <br>
+                Well, this seems a grim view of the world, you may think. What I'm telling you is that you should worry? Yes, but it's not as bad as it sounds. It's exhilarating to overcome worries. You don't see faces much happier than people winning gold medals. And you know why they're so happy? Relief.
+                <br>
+                I'm not saying this is the only way to be happy. Just that some kinds of worry are not as bad as they sound.
+            </blockquote>
+    </section>
+    </div>
+</body>
+</html>

@@ -8,13 +8,15 @@
     border-left: 5px solid #ccc;  /* Optional: adds a left border for styling */
     font-style: italic;          /* Optional: adds italics for the citation */
 }
-blockquote {
+.blockquote {
     background-color: #f0f0f0; /* Light gray background */
     padding: 10px; /* Add padding for better spacing */
     border-left: 5px solid #ccc; /* Optional: a left border for styling */
     margin: 10px 0; /* Optional: margin to separate it from other content */
 }
 
-footer {
+.footer {
     padding-top: 10px; /* Optional: Add some padding for better spacing inside the footer */
   }
+  
+canvas { border: 2px solid #000; background-color: #f0f0f0; }
