@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Distributed Moving Arrows</title>
+    <style>
+        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; }
+        canvas { border: 2px solid black; }
+    </style>
+</head>
+<body>
+    <script>
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        const points = [];
+        const rows = 20;
+        const cols = 30;
+        const arrowSize = 10;
+        const speed = 2;
+        const direction = { x: 1, y: 0 }; // Moving right
+        // Create evenly distributed points
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                points.push({ 
+                    x: (col + 0.5) * (canvas.width / cols),
+                    y: (row + 0.5) * (canvas.height / rows)
+                });
+            }
+        }
+        function drawArrow(x, y) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(Math.atan2(direction.y, direction.x));
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-arrowSize, -arrowSize/2);
+            ctx.lineTo(-arrowSize, arrowSize/2);
+            ctx.closePath();
+            ctx.fillStyle = 'black';
+            ctx.fill();
+            ctx.restore();
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            points.forEach(point => {
+                // Move point
+                point.x += speed * direction.x;
+                point.y += speed * direction.y;
+                // Wrap around if point leaves canvas
+                if (point.x > canvas.width) point.x = 0;
+                if (point.x < 0) point.x = canvas.width;
+                if (point.y > canvas.height) point.y = 0;
+                if (point.y < 0) point.y = canvas.height;
+                // Draw arrow
+                drawArrow(point.x, point.y);
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

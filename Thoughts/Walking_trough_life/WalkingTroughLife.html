@@ -27,125 +27,8 @@
     <button id="driftButton" onclick="toggleDrift()">Drift: OFF</button>
     <button id="visionButton" onclick="toggleVision()">Vision: OFF</button>
 
-    <script>
-        const canvas = document.getElementById('randomWalkCanvas');
-        const ctx = canvas.getContext('2d');
-        let x = canvas.width / 2;
-        let y = canvas.height / 2;
-        let path = [];
-        let animationId;
-        let driftAngle = 0;
-        let stepsize = 20;
-        let driftEnabled = false;
-        let driftStrength = 0.1;
-        let visionEnabled = false;
-        let visionStrength = 0.1;
-        let maxSteps = 100*12;
-        let countSteps = 0;
+    <script src="combined.js"></script>
 
-        function isAtWall(newX, newY) {
-            return newX <= 0 || newX >= canvas.width || 
-                   newY <= 0 || newY >= canvas.height;
-        }
-
-        function randomWalkStep() {
-            let dx = Math.random() - 0.5;
-            let dy = Math.random() - 0.5;
-            
-            // Add drift if enabled
-            if (driftEnabled) {
-                dx += driftStrength*Math.cos(driftAngle);
-                dy += driftStrength*Math.sin(driftAngle);
-            }
-            
-            // Add vision if enabled (only goes up!)
-            if (visionEnabled) {
-                dy += visionStrength;
-            }
-
-            const newX = x + dx * stepsize;
-            const newY = y + dy * stepsize;
-            
-            if (isAtWall(newX, newY)) {
-                alert('Reached a wall!');
-                return null;
-            }
-
-            if (countSteps > maxSteps){
-                alert('Ran out of steps!');
-                return null;
-            }
-            countSteps +=1;
-            
-            x = newX;
-            y = newY;
-            
-            return { x, y };
-        }
-
-        function drawPath() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.beginPath();
-            ctx.moveTo(path[0].x, path[0].y);
-            for (let i = 1; i < path.length; i++) {
-                ctx.lineTo(path[i].x, path[i].y);
-            }
-            ctx.strokeStyle = 'blue';
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.arc(x, y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = 'red';
-            ctx.fill();
-        }
-
-        function animate() {
-            const newPoint = randomWalkStep();
-            if (newPoint) {
-                path.push(newPoint);
-                drawPath();
-                animationId = requestAnimationFrame(animate);
-            }
-        }
-
-        function startAnimation() {
-            if (!animationId) {
-                animate();
-            }
-        }
-
-        function resetAnimation() {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-            x = canvas.width / 2;
-            y = canvas.height / 2;
-            path = [{ x, y }];
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPath();
-        }
-
-        function toggleDrift() {
-            driftEnabled = !driftEnabled;
-            const driftButton = document.getElementById('driftButton');
-            driftButton.textContent = driftEnabled ? 'Drift: ON' : 'Drift: OFF';
-
-            // Randomize drift angle when enabled
-            if (driftEnabled) {
-                driftAngle = Math.random() * 2 * Math.PI;
-            }
-        }
-
-        function toggleVision() {
-            visionEnabled = !visionEnabled;
-            const visionButton = document.getElementById('visionButton');
-            visionButton.textContent = visionEnabled ? 'Vision: ON' : 'Vision: OFF';
-        }
-
-        path = [{ x, y }];
-        drawPath();
-    </script>
-    
 <section>
     <h2 id="[1]">[1] staying upwind</h2>
     <blockquote>
@@ -154,6 +37,8 @@
     In the graduation-speech approach, you decide where you want to be in twenty years, and then ask: what should I do now to get there? I propose instead that you don't commit to anything in the future, but just look at the options available now, and choose those that will give you the most promising range of options afterward.
     <br>
     It's not so important what you work on, so long as you're not wasting your time. Work on things that interest you and increase your options, and worry later about which you'll take.
+    <br>
+    Suppose you're a college freshman deciding whether to major in math or economics. Well, math will give you more options: you can go into almost any field from math. If you major in math it will be easy to get into grad school in economics, but if you major in economics it will be hard to get into grad school in math.
     <br>
     Flying a glider is a good metaphor here. Because a glider doesn't have an engine, you can't fly into the wind without losing a lot of altitude. If you let yourself get far downwind of good places to land, your options narrow uncomfortably. As a rule you want to stay upwind. So I propose that as a replacement for "don't give up on your dreams." Stay upwind.
     <br>
@@ -168,7 +53,5 @@
     <br>
     I'm not saying this is the only way to be happy. Just that some kinds of worry are not as bad as they sound.
 </section>
-<a href="../index.html">Back to Home Page</a>
-
 </body>
 </html>
