@@ -1,6 +1,7 @@
 .container {
     width: 33.33%;
     margin: 0 auto;
+
 }
 .citation {
     background-color: #f0f0f0;  /* Light grey background */
@@ -8,7 +9,7 @@
     border-left: 5px solid #ccc;  /* Optional: adds a left border for styling */
     font-style: italic;          /* Optional: adds italics for the citation */
 }
-.blockquote {
+blockquote {
     background-color: #f0f0f0; /* Light gray background */
     padding: 10px; /* Add padding for better spacing */
     border-left: 5px solid #ccc; /* Optional: a left border for styling */
@@ -20,3 +21,4 @@
   }
   
 canvas { border: 2px solid #000; background-color: #f0f0f0; }
+

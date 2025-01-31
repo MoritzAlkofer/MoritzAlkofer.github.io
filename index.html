@@ -4,25 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
+    <div class="container">
     <h1>Welcome to my Home Page</h1>
         <p>
             <section>
                 <p>
-                    Please be aware that this homepage is still work in progress. I use it to sort my thoughts on what to do. 
-                    <br>
-                    Im taking some time to do this. Here I think about why it's sensible to <a href="Thoughts/taking_time_to_think.html">'think slow, move fast'</a>
+                    Please be aware that this homepage is still <a href="Figures/work_in_progress.png">work in progress</a>. I use it to sort my thoughts and develop a vision.
+                    
+                    <section><h2>Why do do you need a vision?</h2>
+                        <ol>
+                            <li>If life was in a vacuum, you would essentially do a <b>random walk.</b></li>
+                            <li>But life is not a vacuum. Society will tell you where to go, introducing <b>drift</b>.</li>
+                            <li>If you have a <b>vision</b>, you can introduce a drift of your own, towards your goal.</li>
+                        </ol>
+                
+                        <canvas id="Canvas" width="600" height="300"></canvas>
+                        <br>
+                        <button onclick="startAnimation()">Start Walk</button>
+                        <button onclick="resetAnimation()">Reset</button>
+                        <button id="driftButton" onclick="toggleDrift()">Drift: OFF</button>
+                        <button id="visionButton" onclick="toggleVision()">Vision: OFF</button>
+                        
+                        <script src="randomWalk.js"></script>
+                    </section>
                 </p>
-                <p>
-                    You might find parts of this website odd. Stupid or annoying even. This is ok.
-                    I put it up on purpose. This is what I am like. It's a filter, for both of us. 
-                    I am happy to chat about the <a href="Thoughts/concorde.html">Concorde</a>, but it would be a pity for both of us to 
-                    talk for great lengths or even work together only to find out that you hate dislike people who like thinking about the Concorde.
-                </p>
+
+                    Also I write on some things that I like, and collect links that are funny/ useful. 
+                    Im taking some time to do this. <a href="Thoughts/taking_time_to_think.html">Here</a> 
+                    are some thoughts about about why I think it's a sensible thing to do.
             </section>
         
-        <img src="../Figures/work_in_progress.png" alt="endosymbiosis" style="width: 100%;">
+
         <h2>Navigation</h2>
         <ol>
             <li><a href="Thoughts/vision.html">Vision</a></li>
@@ -37,5 +52,6 @@
             <li><a href="Thoughts/walkingTroughLife/main.html">Walking trough life</a></li>
             <li style="background-color:tomato;">anonymous feedback!</li>
         </ol>
+    </div>
 </body>
 </html>

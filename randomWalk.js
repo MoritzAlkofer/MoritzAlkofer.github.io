@@ -10,15 +10,24 @@ const arrows= {
     rows: 10,
     cols: 20,
     speed: 2, // Speed of arrows
-};
+    dx: 1, // arrow movement
+    dy: 0, 
+    color: 'grey', // color
+    alpha: 0.3 // transparency
+}
+
 const walker = {
     path: [],
     x: canvas.width / 2, // Start in the center
     y: canvas.height / 2,
     stepSize: 20, // Random step size
-    drift: { enabled: false, strength: 0.1}, // Default: no drift
-    vision: { enabled: false, strength: 0.1}, // Vision toggle
+    drift: { enabled: false, dx: 0.03, dy: 0}, // Default: no drift. If drift, drift in x direction
+    vision: { enabled: false, dx: 0, dy: 0.1}, // Default: no vision. If vision, drift in y direction
+    color: 'red', // walker color
+    alpha: 1
 }
+
+// drift and vision 
 
 function isAtWall(newX, newY) {
     return newX <= 0 || newX >= canvas.width || 
@@ -26,15 +35,23 @@ function isAtWall(newX, newY) {
 }
 
 function randomWalkStep() {
-    let dx = Math.random() - 0.5;
-    let dy = Math.random() - 0.5;
+    let dx, dy;
+    if (Math.random()<=0.5){
+        dx = Math.random() - 0.5;
+        dy = 0
+    } else {
+        dx = 0
+        dy = Math.random() - 0.5;
+    }
 
     if (walker.drift.enabled) {
-        dx += walker.drift.strength;
+        dx += walker.drift.dx;
+        dy += walker.drift.dy;
     }
 
     if (walker.vision.enabled) {
-        dy += walker.vision.strength;
+        dx += walker.vision.dx;
+        dy += walker.vision.dy;
     }
 
     const newX = walker.x + dx * walker.stepSize;
@@ -62,16 +79,16 @@ function drawPath() {
 function drawWalker() {
     ctx.beginPath();
     ctx.arc(walker.x, walker.y, 5, 0, Math.PI * 2);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = walker.color;
     ctx.fill();
 
     // Draw the vision arrow if enabled
     if (walker.vision.enabled) {
-        drawArrow(walker.x, walker.y, 0, walker.vision.strength); // Vision points upward
+        drawArrow(walker.x, walker.y, walker.vision.dx, walker.vision.dy, walker.color); // Vision points upward
     }
 }
 
-function drawArrow(x, y, dx, dy) {
+function drawArrow(x, y, dx, dy, color = 'green', alpha = 1.0) {
     const arrowLength = 20; // Length of the arrow
     const angle = Math.atan2(dy, dx); // Direction of the arrow
 
@@ -79,12 +96,16 @@ function drawArrow(x, y, dx, dy) {
     ctx.translate(x, y);
     ctx.rotate(angle);
 
+    // Set transparency and color
+    ctx.globalAlpha = alpha; // Set transparency (0.0 to 1.0)
+    ctx.strokeStyle = color; // Set line color
+    ctx.fillStyle = color; // Set fill color
+    ctx.lineWidth = 2;
+
     // Draw the arrow line
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(arrowLength, 0);
-    ctx.strokeStyle = 'green';
-    ctx.lineWidth = 2;
     ctx.stroke();
 
     // Draw the arrowhead
@@ -93,7 +114,6 @@ function drawArrow(x, y, dx, dy) {
     ctx.lineTo(arrowLength - 5, -5);
     ctx.lineTo(arrowLength - 5, 5);
     ctx.closePath();
-    ctx.fillStyle = 'green';
     ctx.fill();
 
     ctx.restore();
@@ -123,7 +143,7 @@ function updateArrows(){
 function drawArrows(){
     arrows.points.forEach(point => {
             // Draw arrow
-            drawArrow(point.x, point.y,1,0);
+            drawArrow(point.x, point.y,arrows.dx,arrows.dy,arrows.color,arrows.alpha);
     })
 }
 
@@ -141,10 +161,12 @@ function updateDrawing() {
     }
     drawImageAtPoint(canvas.width / 2 - 35, canvas.height - 45, 70,50);
 }
-function animate(recusive = true) {
+
+function animate() {
     
     // update walker
     updateWalker();
+    // raise alert and stop animation if walker hits the wall
     if (isAtWall(walker.x, walker.y)) {
         alert('Reached a wall!');
         stopAnimation();
@@ -154,7 +176,6 @@ function animate(recusive = true) {
     updateDrawing()
     // Request the next frame if recursive = true
     animationId = requestAnimationFrame(animate);        
-    
 }
 
 function startAnimation() {
@@ -196,6 +217,11 @@ function toggleVision() {
     updateDrawing();
 }
 
+function drawImageAtPoint(x, y, width = null, height = null) {
+    if (goalFlagImage.complete) {
+        ctx.drawImage(goalFlagImage, x, y, width, height);
+    }
+}
 
 // Create evenly distributed points
 for (let row = 0; row < arrows.rows; row++) {
@@ -207,15 +233,10 @@ for (let row = 0; row < arrows.rows; row++) {
     }
 }
 
-function drawImageAtPoint(x, y, width = null, height = null) {
-    if (goalFlagImage.complete) {
-        ctx.drawImage(goalFlagImage, x, y, width, height);
-    }
-}
-
 const goalFlagImage = new Image();
-goalFlagImage.src = 'goalFlag.png'; // Replace with the path to your PNG file
+goalFlagImage.src = '/Figures/goalFlag.png'; // Replace with the path to your PNG file
+// make sure to update drawing only after image is loaded 
 goalFlagImage.onload = function () {
-walker.path = [{ x: walker.x, y: walker.y }];
-updateDrawing()
+    walker.path = [{ x: walker.x, y: walker.y }];
+    updateDrawing()
 };
